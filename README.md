@@ -5,9 +5,9 @@
 **Project Link:**  
 Santander Customer Satisfaction Dataset (Kaggle)
 
-This project focuses on predicting whether a bank customer is dissatisfied based on anonymized numerical features. The dataset comes from the Santander Customer Satisfaction Kaggle competition, where the goal is to identify unhappy customers early.
+This project aims to predict whether a customer is dissatisfied using anonymized numerical features. The dataset comes from a Kaggle competition where the objective is to identify unhappy customers early based on their behavior and account-related data.
 
-The dataset contains 76,020 rows and 371 columns, including an ID column, 369 numerical features, and a binary target variable (`TARGET`). The target is highly imbalanced, with only about 4% of customers labeled as dissatisfied.
+The dataset contains 76,020 observations and 371 columns, including an ID column, 369 numerical features, and a binary target variable (`TARGET`). The target is highly imbalanced, with approximately 4% of customers labeled as dissatisfied.
 
 ---
 
@@ -18,55 +18,50 @@ The dataset was loaded from `train.csv`.
 - Number of rows: 76,020  
 - Number of features: 371  
 
-Missing Values:
-- No significant missing values detected.
+Missing Values:  
+- No missing values were detected in the dataset.
 
-Feature Types:
-- All features are numerical.
-- Feature names are anonymized (e.g., `var15`, `saldo_var30`).
+Feature Types:  
+- All features are numerical and anonymized (e.g., `var15`, `saldo_var30`).
 
-Outliers:
-- Some extreme values exist due to financial variables.
-- Outliers are defined as unusually large or small values compared to the general distribution of each feature.
+Outliers:  
+- Some features contain extreme values, which is expected in financial data.  
+- Outliers are defined as values significantly outside the typical range of a feature.
 
-Class Imbalance:
-- Yes, the dataset is highly imbalanced:
-  - ~96% satisfied (0)
-  - ~4% dissatisfied (1)
+Class Imbalance:  
+- ~96% satisfied (`TARGET = 0`)  
+- ~4% dissatisfied (`TARGET = 1`)  
 
-Target:
-- Classification problem
-- `TARGET = 0` → satisfied  
-- `TARGET = 1` → dissatisfied  
+Target:  
+- Binary classification problem  
+- `0` → satisfied customers  
+- `1` → dissatisfied customers  
 
 ---
 
 ## Data Visualization
 
-Due to the large number of features (369), full visualization of every feature is not practical.
+Given the large number of features, plotting every variable is impractical and would reduce clarity. Instead, a subset of representative features was examined along with the target distribution.
 
-Instead:
-- Feature distributions were inspected for general patterns.
-- The imbalance between classes was confirmed visually.
-
-Observations:
-- Most features do not show clear separation individually.
-- The signal for prediction likely comes from combinations of features rather than single variables.
+Observations:  
+- The target distribution confirms strong class imbalance.  
+- Individual features show limited separation between classes.  
+- Predictive patterns likely emerge from combinations of multiple features rather than any single variable.  
 
 ---
 
 ## Data Cleaning and Preperation for Machine Learning
 
-Steps performed:
+The following preprocessing steps were performed:
 
-- Removed `ID` column (not useful for prediction)
-- No missing values required handling
-- Applied feature scaling using `StandardScaler`
-- No categorical features present, so no one-hot encoding was needed
+- Removed the `ID` column, as it does not contribute to prediction  
+- Verified that no missing values required handling  
+- Applied feature scaling using `StandardScaler`  
+- Confirmed that no categorical encoding was necessary  
 
-Rescaling:
-- Important for Logistic Regression
-- Applied to all features
+Rescaling:  
+- Important for models such as Logistic Regression  
+- All features were standardized  
 
 ---
 
@@ -74,12 +69,10 @@ Rescaling:
 
 ### Problem Formulation
 
-- Removed non-useful columns (`ID`)
-- Target variable used: `TARGET`
-- Data split into:
-  - Training set (80%)
-  - Test set (20%)
-- Stratified split used to preserve class imbalance
+- Removed non-informative columns (e.g., `ID`)  
+- Defined `TARGET` as the prediction variable  
+- Split the dataset into training and test sets (80/20)  
+- Used stratified sampling to preserve class distribution  
 
 ---
 
@@ -87,20 +80,21 @@ Rescaling:
 
 Three models were trained:
 
-1. Logistic Regression (with class balancing)
-2. Random Forest (with class balancing)
-3. Gradient Boosting
+1. Logistic Regression with class balancing  
+2. Random Forest with class balancing  
+3. Gradient Boosting  
 
 ---
 
 ### Evaluate Performance on Validation Sample
 
-Metrics used:
-- Accuracy
-- Precision
-- Recall
-- F1 Score
-- ROC AUC
+Performance was evaluated using:
+
+- Accuracy  
+- Precision  
+- Recall  
+- F1 Score  
+- ROC AUC  
 
 Results:
 
@@ -129,26 +123,28 @@ Results:
 
 ### Apply ML to the Challenge Test Set
 
-The model was trained and evaluated on a hold-out test set.
+The trained models were applied to a hold-out test set to simulate performance on unseen data.
 
 A confusion matrix was generated for Logistic Regression:
 [[9941 4661]
 [ 141 461]]
 
-This shows:
-- High recall for dissatisfied customers
-- Large number of false positives
+This indicates:
+- Strong recall for dissatisfied customers  
+- A high number of false positives  
 
 ---
 
 ## Conclusion
 
-- The dataset is highly imbalanced, making accuracy unreliable.
-- Logistic Regression performed best for detecting dissatisfied customers.
-- There is a clear trade-off between recall and precision.
-- Ensemble methods achieved higher accuracy but failed to capture the minority class effectively.
+The primary challenge in this dataset is severe class imbalance, which makes accuracy a misleading metric.
+
+Logistic Regression performed best for detecting dissatisfied customers because it prioritizes recall through class balancing. While this leads to more false positives, it ensures that a larger proportion of dissatisfied customers are correctly identified.
+
+Random Forest and Gradient Boosting achieved higher overall accuracy but were less effective at capturing the minority class.
 
 Future improvements could include:
-- Oversampling techniques (e.g., SMOTE)
-- Hyperparameter tuning
-- More advanced models like XGBoost
+
+- Resampling techniques such as SMOTE  
+- Hyperparameter tuning  
+- Advanced ensemble models such as XGBoost or LightGBM  
